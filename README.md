@@ -2,6 +2,27 @@
 
 This is a simple script that creates development tasks/sub-tasks in Jira for a given project on given epics/stories.
 
+## Notice
+
+### `This script requires specific fields to exist in your Jira Project Settings on Development Tasks/Sub-Tasks. If you don't have it, the script will fail. Here's how to add it:`
+
+<br/>
+
+1. Go to your Jira Project Settings
+2. Go to `Issue Screens` tab
+   ![Issue Layout](https://i.ibb.co/3NHktvt/image.png)
+3. Click on `Edit Scheme` for `Development Tasks`/`Sub-Tasks` (you can also create a new one)
+4. Go into your screen scheme details
+5. Add the below fields to your screen
+   ![Screen Scheme](https://i.ibb.co/YWYKBCK/image.png)
+
+- `Epic Link`
+- `Time Tracking`
+- `Summary`
+- `Description`
+- `Assignee`
+- `Sprint`
+
 ## Usage
 
 ```npm
