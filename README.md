@@ -4,7 +4,7 @@ This is a simple script that creates development tasks/sub-tasks in Jira for a g
 
 ## Notice
 
-### `This script requires specific fields to exist in your Jira Project Settings on Development Tasks/Sub-Tasks. If you don't have it, the script will fail. Here's how to add it:`
+### `This script requires specific fields to exist in your Jira Project Settings on Development Tasks/Sub-Tasks. If you don't have it, the script will fail. Here's how to add it (or ask your JIRA Admin to do so):`
 
 <br/>
 
