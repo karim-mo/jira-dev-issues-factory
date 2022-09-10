@@ -1,0 +1,18 @@
+{
+  "epic-or-story-id(XXX-XXXX)": {
+    "type": "<epic, story>",
+    "issues": [
+      {
+        "title": "<Task title>",
+        "description": "<Task description>",
+        "estimate": "<Task estimate (1d, 1w, etc..)>",
+        "subTasks <This array is not allowed if the type is a story>": [
+          {
+            "title": "<Subtask title>",
+            "estimate": "<Subtask estimate (1d, 1w, etc..)>"
+          }
+        ]
+      }
+    ]
+  }
+}
