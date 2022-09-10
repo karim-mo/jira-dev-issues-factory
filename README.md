@@ -108,7 +108,7 @@ COMPANY_DOMAIN=<Company domain> # e.g. atlassian.com (used for the employee emai
 
 ## Jira access token
 
-### `Note: This is mainly (but not limited to) for cloud users (google, slack, etc..)`
+### `Note: This is mainly (but not limited to) for cloud users (google, slack, etc..) who don't have a password setup.`
 
 <br/>
 
