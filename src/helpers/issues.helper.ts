@@ -114,6 +114,4 @@ export async function createJiraIssuesFromConfig(jiraConfig: object, user: Jira.
   });
 
   await Promise.all(promises);
-
-  log(green('All issues created successfully'));
 }
