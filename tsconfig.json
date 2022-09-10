@@ -23,7 +23,8 @@
     "paths": {
       "@validations/*": ["./src/validations/*"],
       "@helpers/*": ["./src/helpers/*"],
-      "@enums/*": ["./src/enums/*"]
+      "@enums/*": ["./src/enums/*"],
+      "@utils/*": ["./src/utils/*"]
     }
   },
   "ts-node": {
