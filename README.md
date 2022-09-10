@@ -106,7 +106,11 @@ JIRA_ACCESS_TOKEN=<Jira access token> # e.g. 1234567890 (discussed below)
 COMPANY_DOMAIN=<Company domain> # e.g. atlassian.com (used for the employee email domains)
 ```
 
-### Jira access token
+## Jira access token
+
+### `Note: This is mainly (but not limited to) for cloud users (google, slack, etc..)`
+
+<br/>
 
 The script uses the Jira access token to authenticate the user. To generate a token, follow the steps below:
 
