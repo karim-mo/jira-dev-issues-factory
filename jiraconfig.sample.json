@@ -4,7 +4,7 @@
     "issues": [
       {
         "title": "<Task title>",
-        "description": "<Task description>",
+        "description": "<Task description> <This field is not allowed if the type is a story>",
         "estimate": "<Task estimate (1d, 1w, etc..)>",
         "subTasks <This array is not allowed if the type is a story>": [
           {

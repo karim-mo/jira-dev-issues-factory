@@ -41,7 +41,7 @@ The script is configured via a `jiraconfig.json` file. The file is structured as
     "issues": [
       {
         "title": "<Task title>",
-        "description": "<Task description>",
+        "description": "<Task description> <This field is not allowed if the type is a story>",
         "estimate": "<Task estimate (1d, 1w, etc..)>",
         "subTasks <This array is not allowed if the type is a story>": [
           {
@@ -99,12 +99,10 @@ The script is configured via a `jiraconfig.json` file. The file is structured as
     "issues": [
       {
         "title": "Create a new feature",
-        "description": "This is a new feature",
         "estimate": "1d"
       },
       {
         "title": "Create a new feature",
-        "description": "This is a new feature",
         "estimate": "1d"
       }
     ]
