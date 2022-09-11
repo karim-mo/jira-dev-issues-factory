@@ -47,6 +47,10 @@ export async function createJiraIssuesFromConfig(jiraConfig: object, user: Jira.
           },
           ...(epicOrStory === IssueType.EPIC && { customfield_10008: parent.key }),
           ...(epicOrStory === IssueType.STORY && { parent: { key: parent.key } }),
+          timetracking: {
+            originalEstimate: issue.estimate,
+            remainingEstimate: issue.estimate,
+          },
         },
       };
 
@@ -54,15 +58,6 @@ export async function createJiraIssuesFromConfig(jiraConfig: object, user: Jira.
 
       if (!createdIssue || createdIssue.errors)
         throw new Error(`Could not create issue ${issue.title}, error: ${JSON.stringify(createdIssue?.errors)}`);
-
-      await jiraApi.updateIssue(createdIssue.key, {
-        fields: {
-          timetracking: {
-            originalEstimate: issue.estimate,
-            remainingEstimate: issue.estimate,
-          },
-        },
-      });
 
       if (epicOrStory === IssueType.EPIC && issue.subTasks?.length) {
         const subtaskPromises = issue.subTasks?.map(async (subtask) => {
@@ -82,6 +77,10 @@ export async function createJiraIssuesFromConfig(jiraConfig: object, user: Jira.
               parent: {
                 key: createdIssue.key,
               },
+              timetracking: {
+                originalEstimate: subtask.estimate,
+                remainingEstimate: subtask.estimate,
+              },
             },
           };
 
@@ -91,15 +90,6 @@ export async function createJiraIssuesFromConfig(jiraConfig: object, user: Jira.
             throw new Error(
               `Could not create subtask ${subtask.title}, error: ${JSON.stringify(createdSubtask?.errors)}`,
             );
-
-          await jiraApi.updateIssue(createdSubtask.key, {
-            fields: {
-              timetracking: {
-                originalEstimate: subtask.estimate,
-                remainingEstimate: subtask.estimate,
-              },
-            },
-          });
         });
 
         await Promise.all(subtaskPromises);
