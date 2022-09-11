@@ -11,7 +11,7 @@ export async function createJiraIssuesFromConfig(jiraConfig: object, user: Jira.
     const epicOrStory = jiraConfig[key].type;
 
     let parent: any;
-    if (epicOrStory === 'epic') {
+    if (epicOrStory === IssueType.EPIC) {
       const epic = await jiraApi.getEpic(key);
 
       if (!epic) throw new Error(`Could not find epic with key ${key}`);
@@ -21,7 +21,7 @@ export async function createJiraIssuesFromConfig(jiraConfig: object, user: Jira.
     } else {
       const story = await jiraApi.getIssue(key);
 
-      if (!story) throw new Error(`Could not find story with key ${key}`);
+      if (!story || story?.fields?.issuetype?.name !== 'Story') throw new Error(`Could not find story with key ${key}`);
 
       parent = story;
       log(magenta(`Creating issues for story: ${story.fields?.summary}`));
