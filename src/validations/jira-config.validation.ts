@@ -12,7 +12,7 @@ const jiraEpicConfigValidation = Joi.object({
     issues: Joi.array().items(
       Joi.object({
         title: Joi.string().required(),
-        description: Joi.string().required(),
+        description: Joi.string().optional(),
         estimate: Joi.string().pattern(estimatesRegex).required(),
         subTasks: Joi.array()
           .items(

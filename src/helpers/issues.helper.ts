@@ -23,6 +23,14 @@ export async function createJiraIssuesFromConfig(jiraConfig: object, user: Jira.
 
       if (!story || story?.fields?.issuetype?.name !== 'Story') throw new Error(`Could not find story with key ${key}`);
 
+      await jiraApi.updateIssue(key, {
+        fields: {
+          customfield_10010: sprint.id,
+        },
+      });
+
+      log(magenta(`Added story ${key} to sprint ${sprint.name}`));
+
       parent = story;
       log(magenta(`Creating issues for story: ${story.fields?.summary}`));
     }
@@ -67,7 +75,7 @@ export async function createJiraIssuesFromConfig(jiraConfig: object, user: Jira.
                 key: process.env.JIRA_PROJECT_KEY,
               },
               summary: subtask.title,
-              description: subtask.description,
+              description: subtask.description || '',
               issuetype: {
                 name: 'Development Sub-task',
               },
