@@ -14,7 +14,10 @@ export function validateConfigFile(config: object) {
       throw new Error('Invalid config file, Dev Tasks without an n/a key must have an empty subTasks array.');
 
     const { error } = jiraConfigValidation.validate(config[key]);
-    if (error) throw new Error('Invalid config file, please refer to the sample config file.');
+    if (error) {
+      console.log(JSON.stringify(error, null, 2));
+      throw new Error('Invalid config file, please refer to the sample config file.');
+    }
   }
 
   log(green('Configuration file is valid, proceeding...'));
