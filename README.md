@@ -36,8 +36,8 @@ The script is configured via a `jiraconfig.json` file. The file is structured as
 
 ```json
 {
-  "epic-or-story-id(XXX-XXXX)": {
-    "type": "<epic, story>",
+  "epic-or-story-id(XXX-XXXX) OR n/a": {
+    "type": "<epic, story, dev_task>",
     "issues": [
       {
         "title": "<Task title>",

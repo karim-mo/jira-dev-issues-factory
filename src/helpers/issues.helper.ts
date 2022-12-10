@@ -8,17 +8,21 @@ export async function createJiraIssuesFromConfig(jiraConfig: object, user: Jira.
   log(yellow('Creating Jira issues...'));
 
   const promises = Object.keys(jiraConfig).map(async (key) => {
-    const epicOrStory = jiraConfig[key].type;
+    const issueType = jiraConfig[key].type;
+    const isEpic = issueType === IssueType.EPIC;
+    const isStory = issueType === IssueType.STORY;
+    const isDevTask = issueType === IssueType.DEV_TASK && key !== 'n/a';
+    const isNewDevTask = issueType === IssueType.DEV_TASK && key === 'n/a';
 
-    let parent: any;
-    if (epicOrStory === IssueType.EPIC) {
+    let parent: Jira.JsonResponse;
+    if (isEpic) {
       const epic = await jiraApi.getEpic(key);
 
       if (!epic) throw new Error(`Could not find epic with key ${key}`);
 
       parent = epic;
       log(blue(`Creating issues for epic: ${epic.name}`));
-    } else {
+    } else if (isStory) {
       const story = await jiraApi.getIssue(key);
 
       if (!story || story?.fields?.issuetype?.name !== 'Story') throw new Error(`Could not find story with key ${key}`);
@@ -33,6 +37,22 @@ export async function createJiraIssuesFromConfig(jiraConfig: object, user: Jira.
 
       parent = story;
       log(magenta(`Creating issues for story: ${story.fields?.summary}`));
+    } else if (isDevTask) {
+      const devTask = await jiraApi.getIssue(key);
+
+      if (devTask?.fields?.issuetype?.name !== 'Development Task')
+        throw new Error(`Could not find dev task with key ${key}`);
+
+      await jiraApi.updateIssue(key, {
+        fields: {
+          customfield_10010: sprint.id,
+        },
+      });
+
+      log(magenta(`Added dev task ${key} to sprint ${sprint.name}`));
+
+      parent = devTask;
+      log(magenta(`Creating issues for dev task: ${devTask.fields?.summary}`));
     }
 
     const issues = jiraConfig[key].issues;
@@ -43,18 +63,18 @@ export async function createJiraIssuesFromConfig(jiraConfig: object, user: Jira.
           project: {
             key: process.env.JIRA_PROJECT_KEY,
           },
-          ...(epicOrStory === IssueType.EPIC && { customfield_10010: sprint.id }),
+          ...((isEpic || isNewDevTask) && { customfield_10010: sprint.id }),
           summary: issue.title,
           description: issue.description,
           issuetype: {
-            ...(epicOrStory === IssueType.EPIC && { name: 'Development Task' }),
-            ...(epicOrStory === IssueType.STORY && { name: 'Development Sub-task' }),
+            ...((isEpic || isNewDevTask) && { name: 'Development Task' }),
+            ...((isStory || isDevTask) && { name: 'Development Sub-task' }),
           },
           assignee: {
             id: user.accountId,
           },
-          ...(epicOrStory === IssueType.EPIC && { customfield_10008: parent.key }),
-          ...(epicOrStory === IssueType.STORY && { parent: { key: parent.key } }),
+          ...(isEpic && { customfield_10008: parent.key }),
+          ...((isStory || isDevTask) && { parent: { key: parent.key } }),
           timetracking: {
             originalEstimate: issue.estimate,
             remainingEstimate: issue.estimate,
@@ -67,7 +87,7 @@ export async function createJiraIssuesFromConfig(jiraConfig: object, user: Jira.
       if (!createdIssue || createdIssue.errors)
         throw new Error(`Could not create issue ${issue.title}, error: ${JSON.stringify(createdIssue?.errors)}`);
 
-      if (epicOrStory === IssueType.EPIC && issue.subTasks?.length) {
+      if ((isEpic || isNewDevTask) && issue.subTasks?.length) {
         const subtaskPromises = issue.subTasks?.map(async (subtask) => {
           const subtaskObj: Jira.IssueObject = {
             fields: {
