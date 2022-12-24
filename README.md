@@ -119,7 +119,7 @@ The script uses the following environment variables:
 ```bash
 JIRA_HOST=<Jira host> # e.g. jira.atlassian.com
 JIRA_USER=<Jira user> # e.g. johndoe
-JIRA_PASS=<Jira password> # e.g. 123456
+JIRA_PASS=<Jira password> # e.g. 123456 (Not needed if you have a Jira access token)
 JIRA_PROJECT_KEY=<Jira project key> # e.g. DEV
 JIRA_ACCESS_TOKEN=<Jira access token> # e.g. 1234567890 (discussed below)
 COMPANY_DOMAIN=<Company domain> # e.g. atlassian.com (used for the employee email domains)
