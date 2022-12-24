@@ -48,24 +48,24 @@ const jiraStoryConfigValidation = Joi.object({
 });
 
 // When type is dev task, the subtasks array is not allowed
-const jiraDevTaskNoParentConfigValidation = Joi.object({
-  type: Joi.string()
-    .valid(...Object.values(IssueType))
-    .required(),
-}).when('.type', {
-  is: IssueType.DEV_TASK,
-  then: Joi.object({
-    issues: Joi.array().items(
-      Joi.object({
-        title: Joi.string().required(),
-        estimate: Joi.string().pattern(estimatesRegex).required(),
-      }),
-    ),
-  }),
-});
+// const jiraDevTaskNoParentConfigValidation = Joi.object({
+//   type: Joi.string()
+//     .valid(...Object.values(IssueType))
+//     .required(),
+// }).when('.type', {
+//   is: IssueType.DEV_TASK,
+//   then: Joi.object({
+//     issues: Joi.array().items(
+//       Joi.object({
+//         title: Joi.string().required(),
+//         estimate: Joi.string().pattern(estimatesRegex).required(),
+//       }),
+//     ),
+//   }),
+// });
 
 // When type is dev task, the subtasks array is not allowed
-const jiraDevTaskParentConfigValidation = Joi.object({
+const jiraDevTaskConfigValidation = Joi.object({
   type: Joi.string()
     .valid(...Object.values(IssueType))
     .required(),
@@ -93,6 +93,6 @@ const jiraDevTaskParentConfigValidation = Joi.object({
 export const jiraConfigValidation = Joi.alternatives(
   jiraEpicConfigValidation,
   jiraStoryConfigValidation,
-  jiraDevTaskNoParentConfigValidation,
-  jiraDevTaskParentConfigValidation,
+  // jiraDevTaskNoParentConfigValidation,
+  jiraDevTaskConfigValidation,
 );
