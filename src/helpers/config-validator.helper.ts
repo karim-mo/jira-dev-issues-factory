@@ -6,6 +6,9 @@ import { green, yellow } from 'cli-color';
 export function validateConfigFile(config: object) {
   log(yellow('Validating configuration file...'));
 
+  if (!Object.keys(config ?? {}).length)
+    throw new Error('Invalid config file, please refer to the sample config file.');
+
   for (const key in config) {
     if (key === 'n/a' && config[key].type !== IssueType.DEV_TASK)
       throw new Error('Invalid config file, Dev Tasks with n/a key must be of type dev_task.');
