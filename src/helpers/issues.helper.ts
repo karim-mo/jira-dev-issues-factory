@@ -248,7 +248,7 @@ function calculateTotalIssuesEstimate(estimatesArray: string[]): string {
   if (days > 0) {
     result += days + 'd ';
   }
-  if (hours > 0 || (hours === 0 && minutes >= 60)) {
+  if (hours > 0 || (hours === 0 && minutes < 60)) {
     result += hours + 'h ';
   }
   if (minutes > 0) {
