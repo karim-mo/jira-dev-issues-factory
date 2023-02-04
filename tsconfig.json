@@ -24,7 +24,9 @@
       "@validations/*": ["./src/validations/*"],
       "@helpers/*": ["./src/helpers/*"],
       "@enums/*": ["./src/enums/*"],
-      "@utils/*": ["./src/utils/*"]
+      "@utils/*": ["./src/utils/*"],
+      "@global/*": ["./src/global/*"],
+      "@interfaces/*": ["./src/interfaces/*"]
     }
   },
   "ts-node": {

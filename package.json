@@ -10,6 +10,7 @@
 	},
 	"devDependencies": {
 		"@types/cli-color": "^2.0.2",
+		"@types/inquirer": "^9.0.3",
 		"@types/jira-client": "^7.1.4",
 		"ts-node": "^10.9.1",
 		"tsc-alias": "^1.7.0",
@@ -21,6 +22,7 @@
 		"cli-color": "^2.0.3",
 		"dotenv": "^16.0.2",
 		"fs-extra": "^10.1.0",
+		"inquirer": "^8.2.5",
 		"jira-client": "^8.1.0",
 		"joi": "^17.6.0"
 	},
