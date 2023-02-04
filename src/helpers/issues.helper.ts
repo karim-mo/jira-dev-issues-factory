@@ -22,14 +22,7 @@ export async function createJiraIssuesFromConfig(jiraConfig: object, user: Jira.
     });
   });
 
-  const preInputTotalEstimate = calculateTotalIssuesEstimate(allEstimates);
-
-  const estimatePrompt = await inquirer.prompt([
-    {
-      type: 'confirm',
-      name: 'estimate',
-      message: `This is your total estimate: \x1b[32m${preInputTotalEstimate}\x1b[0m, proceed?`,
-    },
+  const oldEstimatePrompt = await inquirer.prompt([
     {
       type: 'input',
       name: 'oldEstimate',
@@ -38,15 +31,25 @@ export async function createJiraIssuesFromConfig(jiraConfig: object, user: Jira.
     },
   ]);
 
-  if (!estimatePrompt?.estimate) {
-    log(red('Aborting...'));
-    return;
-  }
-
-  const isValidEstimate = ESTIMATES_REGEX.test(estimatePrompt.oldEstimate);
+  const isValidEstimate = ESTIMATES_REGEX.test(oldEstimatePrompt.oldEstimate);
 
   if (!isValidEstimate) {
     log(red('Invalid estimate format, aborting...'));
+    return;
+  }
+
+  const totalEstimate = calculateTotalIssuesEstimate([...allEstimates, oldEstimatePrompt.oldEstimate]);
+
+  const estimatePrompt = await inquirer.prompt([
+    {
+      type: 'confirm',
+      name: 'estimate',
+      message: `This is your total estimate: \x1b[32m${totalEstimate}\x1b[0m, proceed?`,
+    },
+  ]);
+
+  if (!estimatePrompt?.estimate) {
+    log(red('Aborting...'));
     return;
   }
 
