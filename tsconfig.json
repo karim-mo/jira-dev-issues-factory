@@ -26,6 +26,7 @@
       "@enums/*": ["./src/enums/*"],
       "@utils/*": ["./src/utils/*"],
       "@global/*": ["./src/global/*"],
+      "@constants/*": ["./src/constants/*"],
       "@interfaces/*": ["./src/interfaces/*"]
     }
   },

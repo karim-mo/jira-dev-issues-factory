@@ -1,9 +1,6 @@
+import { ESTIMATES_REGEX } from '@constants/constants';
 import { IssueType } from '@enums/issue-type.enum';
 import Joi from 'joi';
-
-const estimatesRegex = new RegExp(
-  /^(?=\d+[ywdhms])(( ?\d+y)?(?!\d))?(( ?\d+w)?(?!\d))?(( ?\d+d)?(?!\d))?(( ?\d+h)?(?!\d))?(( ?\d+m)?(?!\d))?(( ?\d+s)?(?!\d))?( ?\d+ms)?$/,
-);
 
 const jiraEpicConfigValidation = Joi.object({
   type: Joi.string()
@@ -16,12 +13,12 @@ const jiraEpicConfigValidation = Joi.object({
       Joi.object({
         title: Joi.string().required(),
         description: Joi.string().optional(),
-        estimate: Joi.string().pattern(estimatesRegex).required(),
+        estimate: Joi.string().pattern(ESTIMATES_REGEX).required(),
         subTasks: Joi.array()
           .items(
             Joi.object({
               title: Joi.string().required(),
-              estimate: Joi.string().pattern(estimatesRegex).required(),
+              estimate: Joi.string().pattern(ESTIMATES_REGEX).required(),
             }),
           )
           .optional(),
@@ -41,7 +38,7 @@ const jiraStoryConfigValidation = Joi.object({
     issues: Joi.array().items(
       Joi.object({
         title: Joi.string().required(),
-        estimate: Joi.string().pattern(estimatesRegex).required(),
+        estimate: Joi.string().pattern(ESTIMATES_REGEX).required(),
       }),
     ),
   }),
@@ -58,7 +55,7 @@ const jiraStoryConfigValidation = Joi.object({
 //     issues: Joi.array().items(
 //       Joi.object({
 //         title: Joi.string().required(),
-//         estimate: Joi.string().pattern(estimatesRegex).required(),
+//         estimate: Joi.string().pattern(ESTIMATES_REGEX).required(),
 //       }),
 //     ),
 //   }),
@@ -76,12 +73,12 @@ const jiraDevTaskConfigValidation = Joi.object({
       Joi.object({
         title: Joi.string().required(),
         description: Joi.string().optional(),
-        estimate: Joi.string().pattern(estimatesRegex).required(),
+        estimate: Joi.string().pattern(ESTIMATES_REGEX).required(),
         subTasks: Joi.array()
           .items(
             Joi.object({
               title: Joi.string().required(),
-              estimate: Joi.string().pattern(estimatesRegex).required(),
+              estimate: Joi.string().pattern(ESTIMATES_REGEX).required(),
             }),
           )
           .optional(),

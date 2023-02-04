@@ -6,6 +6,7 @@ import { log } from '@utils/logger.util';
 import { blue, magenta, green, yellow, red } from 'cli-color';
 import Jira from 'jira-client';
 import inquirer from 'inquirer';
+import { ESTIMATES_REGEX } from '@constants/constants';
 
 export async function createJiraIssuesFromConfig(jiraConfig: object, user: Jira.UserObject, sprint: any) {
   // Calculate total estimate of all issues
@@ -21,18 +22,31 @@ export async function createJiraIssuesFromConfig(jiraConfig: object, user: Jira.
     });
   });
 
-  const totalEstimate = calculateTotalIssuesEstimate(allEstimates);
+  const preInputTotalEstimate = calculateTotalIssuesEstimate(allEstimates);
 
   const estimatePrompt = await inquirer.prompt([
     {
       type: 'confirm',
       name: 'estimate',
-      message: `This is your total estimate: \x1b[32m${totalEstimate}\x1b[0m, proceed?`,
+      message: `This is your total estimate: \x1b[32m${preInputTotalEstimate}\x1b[0m, proceed?`,
+    },
+    {
+      type: 'input',
+      name: 'oldEstimate',
+      message: 'What was your previous/carry-over estimate? (e.g. 1d 2h 30m) (default: 0m)',
+      default: '0m',
     },
   ]);
 
   if (!estimatePrompt?.estimate) {
     log(red('Aborting...'));
+    return;
+  }
+
+  const isValidEstimate = ESTIMATES_REGEX.test(estimatePrompt.oldEstimate);
+
+  if (!isValidEstimate) {
+    log(red('Invalid estimate format, aborting...'));
     return;
   }
 
@@ -168,18 +182,19 @@ export async function createJiraIssuesFromConfig(jiraConfig: object, user: Jira.
               `Could not create subtask ${subtask.title}, error: ${JSON.stringify(createdSubtask?.errors)}`,
             );
 
-          doneIssues.addData({
-            issueIndex,
-            issueSubTaskIndex: subTaskIndex,
-            parentKey: parent.key,
-          });
+          //TODO: ACCOUNT FOR DEVTASKS WITH N/A KEYS OR NO PARENT
+          // doneIssues.addData({
+          //   issueIndex,
+          //   issueSubTaskIndex: subTaskIndex,
+          //   parentKey: parent.key,
+          // });
         });
 
         await Promise.all(subtaskPromises);
-        doneIssues.addData({
-          issueIndex,
-          parentKey: parent.key,
-        });
+        // doneIssues.addData({
+        //   issueIndex,
+        //   parentKey: parent.key,
+        // });
         log(
           green(
             `Created issue https://${process.env.JIRA_HOST}/browse/${createdIssue.key} with ${
@@ -190,10 +205,10 @@ export async function createJiraIssuesFromConfig(jiraConfig: object, user: Jira.
         return;
       }
 
-      doneIssues.addData({
-        issueIndex,
-        parentKey: parent.key,
-      });
+      // doneIssues.addData({
+      //   issueIndex,
+      //   parentKey: parent.key,
+      // });
       log(green(`Created issue https://${process.env.JIRA_HOST}/browse/${createdIssue.key}`));
     });
 
